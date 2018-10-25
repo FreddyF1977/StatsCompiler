@@ -1,15 +1,14 @@
 component displayname="Scrapper" output="false" hint="Scrapper Component" accessors="true" {
 	property type="string" name="MainURL" default="http://www.lhro.ca/index.php" setter="false";
 	property type="string" name="UrlVar" default="?page=stats&entity=game&action=editstatsdetail" setter="false";
-	property type="string" name="CategoryTab" default="scoring";
 
 	public scrapper function init() {
-        variables.oJsoup = createObject("java", "org.jsoup.Jsoup");
-        return this;
-    }
+		variables.oJsoup = createObject("java", "org.jsoup.Jsoup");
+		return this;
+	}
 
-    public struct function SommairePartie(required numeric IdPartie){
-		var Sommaire = variables.oJsoup.connect(variables.MainURL & variables.UrlVar & '&tab=' & variables.CategoryTab & '&id=' & arguments.IdPartie).get();
+	public struct function SommairePartie(required numeric IdPartie){
+		var Sommaire = variables.oJsoup.connect(variables.MainURL & variables.UrlVar & '&tab=scoring&id=' & arguments.IdPartie).get();
 		var arrGoalTable = Sommaire.select('table.inner tr'); // Tableau des rangées de la table avec comme classe inner
 		var objPartie = {}; //Object contenant les propriétés d'une partie
 		var objPartie.Periode = []; //Object contenant un tableau des périodes
@@ -62,7 +61,7 @@ component displayname="Scrapper" output="false" hint="Scrapper Component" access
 		return objPartie;
 	}
 
-    // Crude sanitizer to remove tags we don't need from the string - might improve in the future if needs be
+	// Crude sanitizer to remove tags we don't need from the string - might improve in the future if needs be
 	private string function StringSanitizer(required string string){
 		var SanitizedString = arguments.string;
 
@@ -72,7 +71,7 @@ component displayname="Scrapper" output="false" hint="Scrapper Component" access
 		return SanitizedString;
 	}
 
-    private string function NomDuJoueur(required string nom){
+	private string function NomDuJoueur(required string nom){
 		var nomFormate = trim(UcFirst(lcase(ListGetAt(arguments.nom, 2, '-')), true)) //Trim, Mettre la première lettre en majuscule
 
 		if(ListLen(arguments.nom, '-') >= 3){ // Si le nom du joueur est composé
