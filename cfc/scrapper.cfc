@@ -114,6 +114,20 @@ component displayname="Scrapper" output="false" hint="Scrapper Component" access
 		return objSommaire;
 	}
 
+	public struct function InfoPartie(required numeric IdPartie) {
+		var Info = jSoupConnect(arguments.IdPartie, 'info');
+		var arrInfoTable = Info.select('.stats-scoringsheet tr').mid(1,8); // Tableau des rangées de la table avec comme classe stats-scoringsheet (seulement les 8 premiers éléments)
+		var objInfo = {}; //Object contenant les propriétés d'une partie
+
+		for (var infoRow in arrInfoTable) {
+			objInfo[StringSanitizer(infoRow.select('td')[1].html())] = StringSanitizer(infoRow.select('td')[2].html());
+		}
+
+		objInfo['pageId'] = arguments.IdPartie;
+
+		return objInfo;
+	}
+
 	private object function jSoupConnect(required numeric IdPartie, required string tab){
 		return variables.oJsoup.connect(variables.MainURL & variables.UrlVar & '&tab=' & arguments.tab & '&id=' & arguments.IdPartie).get();
 	}
