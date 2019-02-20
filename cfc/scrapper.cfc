@@ -6,7 +6,7 @@ component displayname="Scrapper" output="false" hint="Scrapper Component" access
 		variables.oJsoup = createObject("java", "org.jsoup.Jsoup");
 		return this;
 	}
-
+	
 	public struct function SommaireBut(required numeric IdPartie) {
 		var Sommaire = jSoupConnect(arguments.IdPartie, 'scoring');
 		var arrGoalTable = Sommaire.select('table.inner tr'); // Tableau des rangées de la table avec comme classe inner
